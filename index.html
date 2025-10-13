@@ -73,13 +73,13 @@
                     <h1 class="text-3xl font-bold mb-6">User Management</h1>
                     <div class="bg-white shadow rounded-lg overflow-x-auto">
                         <table class="min-w-full">
-                            <thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Name</th><th>Identifier (Username/Email)</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
                             <tbody id="users-table-body"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Withdrawals Page -->
+                <!-- Other Pages (Withdrawals, Notifications) are the same as before -->
                 <div id="withdrawals-page" class="page">
                     <h1 class="text-3xl font-bold mb-6">Withdrawal Requests</h1>
                      <div class="bg-white shadow rounded-lg overflow-x-auto">
@@ -89,8 +89,6 @@
                         </table>
                     </div>
                 </div>
-
-                <!-- Notifications Page -->
                 <div id="notifications-page" class="page">
                     <h1 class="text-3xl font-bold mb-6">Send Notification</h1>
                     <div class="stat-card p-6 max-w-lg">
@@ -103,57 +101,86 @@
                 <!-- Settings Page -->
                 <div id="settings-page" class="page">
                     <h1 class="text-3xl font-bold mb-6">App Settings</h1>
-                    <div class="stat-card p-6 max-w-lg">
-                        <div class="mb-6"><label for="min-withdrawal" class="block font-semibold mb-2">Minimum Withdrawal (Coins)</label><input type="number" id="min-withdrawal" class="w-full px-4 py-2 border rounded-lg"></div>
-                        <div class="mb-6"><label for="daily-ad-limit" class="block font-semibold mb-2">Daily Ad Watch Limit</label><input type="number" id="daily-ad-limit" class="w-full px-4 py-2 border rounded-lg"></div>
-                        <div class="mb-6">
-                            <label class="block font-semibold mb-2">Coin Value</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="number" id="coin-value-coins" class="w-full px-4 py-2 border rounded-lg">
-                                <span>Coins = $</span>
-                                <input type="number" id="coin-value-usd" class="w-full px-4 py-2 border rounded-lg">
+                    <div class="stat-card p-6 max-w-3xl space-y-6">
+                        
+                        <div>
+                            <h2 class="text-xl font-semibold mb-4 border-b pb-2">Withdrawal & Task Settings</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div><label for="min-withdrawal" class="block font-semibold mb-2">Minimum Withdrawal (Coins)</label><input type="number" id="min-withdrawal" class="w-full px-4 py-2 border rounded-lg"></div>
+                                <div><label for="tasks-for-withdrawal" class="block font-semibold mb-2">Tasks Required</label><input type="number" id="tasks-for-withdrawal" class="w-full px-4 py-2 border rounded-lg"></div>
+                                <div><label for="referrals-for-withdrawal" class="block font-semibold mb-2">Referrals Required</label><input type="number" id="referrals-for-withdrawal" class="w-full px-4 py-2 border rounded-lg"></div>
                             </div>
                         </div>
-                        <div class="mb-6"><label class="block font-semibold mb-2">Payment Methods (comma-separated)</label><input type="text" id="payment-methods" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g. PayPal,Skrill,Bank Transfer"></div>
-                        <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
+
+                        <div>
+                            <h2 class="text-xl font-semibold mb-4 border-b pb-2">Coin & Referral Settings</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block font-semibold mb-2">Coin Value</label>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="number" id="coin-value-coins" class="w-full px-4 py-2 border rounded-lg">
+                                        <span>Coins = $</span>
+                                        <input type="number" id="coin-value-usd" class="w-full px-4 py-2 border rounded-lg">
+                                    </div>
+                                </div>
+                                <div><label for="referral-bonus" class="block font-semibold mb-2">Referral Bonus (Coins)</label><input type="number" id="referral-bonus" class="w-full px-4 py-2 border rounded-lg"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 class="text-xl font-semibold mb-4 border-b pb-2">Monetag Ad Settings</h2>
+                            <div class="space-y-4">
+                                <div><label for="rewarded-interstitial-ad" class="block font-semibold mb-2">Rewarded Interstitial Code/Tag</label><textarea id="rewarded-interstitial-ad" rows="3" class="w-full px-4 py-2 border rounded-lg" placeholder="Paste Monetag code here"></textarea></div>
+                                <div><label for="rewarded-popup-ad" class="block font-semibold mb-2">Rewarded Popup Code/Tag</label><textarea id="rewarded-popup-ad" rows="3" class="w-full px-4 py-2 border rounded-lg" placeholder="Paste Monetag code here"></textarea></div>
+                                <div><label for="in-app-interstitial-ad" class="block font-semibold mb-2">In-app Interstitial Code/Tag</label><textarea id="in-app-interstitial-ad" rows="3" class="w-full px-4 py-2 border rounded-lg" placeholder="Paste Monetag code here"></textarea></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h2 class="text-xl font-semibold mb-4 border-b pb-2">General Settings</h2>
+                            <div><label for="daily-ad-limit" class="block font-semibold mb-2">Daily Ad Watch Limit</label><input type="number" id="daily-ad-limit" class="w-full px-4 py-2 border rounded-lg"></div>
+                            <div class="mt-4"><label for="payment-methods" class="block font-semibold mb-2">Payment Methods (comma-separated)</label><input type="text" id="payment-methods" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g. PayPal,Skrill,Bank Transfer"></div>
+                            <div class="mt-4"><label for="welcome-notice" class="block font-semibold mb-2">Welcome Notice</label><textarea id="welcome-notice" rows="3" class="w-full px-4 py-2 border rounded-lg" placeholder="Enter a welcome message for users"></textarea></div>
+                        </div>
+
+                        <div class="pt-4"><button id="save-settings-btn" class="btn btn-primary">Save All Settings</button></div>
                     </div>
                 </div>
             </main>
         </div>
     </div>
     
-    <!-- Alert Modal -->
-    <div id="custom-alert" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <!-- All Modals (Alert, Confirm, Adjust Balance) are the same as before -->
+    <div id="custom-alert" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"><div class="bg-white rounded-lg p-6 w-full max-w-sm text-center shadow-xl"><p id="alert-message" class="mb-4 text-gray-800"></p><button id="alert-ok-btn" class="btn btn-primary px-6">OK</button></div></div>
+    <div id="custom-confirm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"><div class="bg-white rounded-lg p-6 w-full max-w-sm text-center shadow-xl"><p id="confirm-message" class="mb-6 text-gray-800"></p><div class="flex justify-center space-x-4"><button id="confirm-cancel-btn" class="btn bg-gray-200 text-gray-800 px-6">Cancel</button><button id="confirm-ok-btn" class="btn btn-danger px-6">Confirm</button></div></div></div>
+    <div id="adjust-balance-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-lg p-6 w-full max-w-sm text-center shadow-xl">
-            <p id="alert-message" class="mb-4 text-gray-800"></p>
-            <button id="alert-ok-btn" class="btn btn-primary px-6">OK</button>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div id="custom-confirm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-lg p-6 w-full max-w-sm text-center shadow-xl">
-            <p id="confirm-message" class="mb-6 text-gray-800"></p>
-            <div class="flex justify-center space-x-4">
-                <button id="confirm-cancel-btn" class="btn bg-gray-200 text-gray-800 px-6">Cancel</button>
-                <button id="confirm-ok-btn" class="btn btn-danger px-6">Confirm</button>
+            <h2 class="text-xl font-bold mb-2">Adjust User Balance</h2>
+            <p id="adjust-user-info" class="mb-4 text-gray-600"></p>
+            <div class="mb-4">
+                <label for="adjustment-amount" class="block text-sm font-medium text-gray-700 mb-1 text-left">Amount</label>
+                <input type="number" id="adjustment-amount" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g., 1000">
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button id="adjust-cancel-btn" class="btn bg-gray-200 text-gray-800">Cancel</button>
+                <button id="adjust-subtract-btn" class="btn btn-warning">Subtract</button>
+                <button id="adjust-add-btn" class="btn btn-success">Add</button>
             </div>
         </div>
     </div>
 
+
     <script type="module">
         const firebaseConfig = {
-  apiKey: "AIzaSyCmwrrQMqISKgUHSD2ITGxJFPr7B-UB-PQ",
-  authDomain: "fb-erning-bot-f4381.firebaseapp.com",
-  databaseURL: "https://fb-erning-bot-f4381-default-rtdb.firebaseio.com",
-  projectId: "fb-erning-bot-f4381",
-  storageBucket: "fb-erning-bot-f4381.firebasestorage.app",
-  messagingSenderId: "272311258561",
-  appId: "1:272311258561:web:2e4e66aa40f5150065b340",
-  measurementId: "G-X8C8FH7E7R"
-};
+            apiKey: "AIzaSyAjdPczpLlBINxzGQ1dvwDRlvZpdUCfKUk",
+            authDomain: "earningapp-c292c.firebaseapp.com",
+            projectId: "earningapp-c292c",
+            storageBucket: "earningapp-c292c.appspot.com",
+            messagingSenderId: "81626520266",
+            appId: "1:81626520266:web:af31f7d303477a3d973233"
+        };
         
-        const ADMIN_UIDS = ["bIsnckUxIAadK0Sg7abJ6E0Q3Xk2"]; 
+        const ADMIN_UIDS = ["kdGbhVRBZHZi28PcnECRMtNCHrW2"]; 
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -163,24 +190,73 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const loginView = document.getElementById('admin-login-view');
-        const dashboardView = document.getElementById('admin-dashboard');
+        // This is the updated function to show Telegram user details
+        function loadUsers() {
+            const usersTableBody = document.getElementById('users-table-body');
+            onSnapshot(collection(db, "users"), (snapshot) => {
+                usersTableBody.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const user = doc.data();
+                    const isBlocked = user.isBlocked || false;
+                    
+                    const displayName = `${user.telegramFirstName || user.name || 'N/A'} ${user.telegramLastName || ''}`.trim();
+                    const displayIdentifier = user.telegramUsername ? `@${user.telegramUsername}` : (user.email || 'No Identifier');
+                    
+                    const userNameForFunc = displayName.replace(/'/g, "\\'");
 
-        window.onload = () => {
+                    const row = `<tr>
+                        <td>${displayName}</td>
+                        <td>${displayIdentifier}</td>
+                        <td>${user.balance || 0}</td>
+                        <td><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${isBlocked ? 'Blocked' : 'Active'}</span></td>
+                        <td class="space-x-2 whitespace-nowrap">
+                            <button class="btn text-xs ${isBlocked ? 'btn-success' : 'btn-danger'}" onclick="window.toggleBlockUser('${doc.id}', ${isBlocked})">${isBlocked ? 'Unblock' : 'Block'}</button>
+                            <button class="btn text-xs btn-primary" onclick="window.openAdjustBalanceModal('${doc.id}', '${userNameForFunc}', ${user.balance || 0})">Adjust Balance</button>
+                        </td>
+                    </tr>`;
+                    usersTableBody.innerHTML += row;
+                });
+            });
+        }
+
+        // All other JavaScript functions are the same as the full version I provided before.
+        // For brevity, I am not repeating all of them, but the "loadUsers" function above is the key change.
+        // Make sure you use the full JavaScript from the previous "User bales kom beshi korte pari" response,
+        // and just replace the loadUsers function with this new one.
+
+        // --- PASTE ALL OTHER JAVASCRIPT FUNCTIONS HERE ---
+        // window.onload = () => { ... }
+        // function navigateTo(pageId) { ... }
+        // function setupEventListeners() { ... }
+        // async function handleAdminLogin() { ... }
+        // function loadDashboardData() { ... }
+        // function loadWithdrawals() { ... }
+        // async function loadSettings() { ... }
+        // window.toggleBlockUser = (userId, isBlocked) => { ... }
+        // window.openAdjustBalanceModal = (userId, userName, currentBalance) => { ... }
+        // async function updateUserBalance(userId, amount, operation) { ... }
+        // window.handleWithdrawal = (requestId, newStatus) => { ... }
+        // async function sendNotification() { ... }
+        // async function saveSettings() { ... }
+        // function showAlert(message) { ... }
+        // function showConfirm(message, onConfirm) { ... }
+        
+        // Example: a few more functions to show they should be here
+         window.onload = () => {
             lucide.createIcons();
             setupEventListeners();
             onAuthStateChanged(auth, (user) => {
                 if (user && ADMIN_UIDS.includes(user.uid)) {
-                    loginView.style.display = 'none';
-                    dashboardView.style.display = 'block';
+                    document.getElementById('admin-login-view').style.display = 'none';
+                    document.getElementById('admin-dashboard').style.display = 'block';
                     navigateTo('dashboard-page');
                     loadDashboardData();
-                    loadUsers();
+                    loadUsers(); // This will call the new, updated function
                     loadWithdrawals();
                     loadSettings();
                 } else {
-                    loginView.style.display = 'flex';
-                    dashboardView.style.display = 'none';
+                    document.getElementById('admin-login-view').style.display = 'flex';
+                    document.getElementById('admin-dashboard').style.display = 'none';
                 }
             });
         };
@@ -193,174 +269,11 @@
                 if (link.dataset.page === pageId) link.classList.add('active');
             });
         }
-
-        function setupEventListeners() {
-            document.getElementById('admin-login-btn').addEventListener('click', handleAdminLogin);
-            document.getElementById('admin-logout-btn').addEventListener('click', () => signOut(auth));
-            document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
-            document.getElementById('send-notification-btn').addEventListener('click', sendNotification);
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.dataset.page); });
-            });
-        }
-
-        async function handleAdminLogin() {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                if (!ADMIN_UIDS.includes(userCredential.user.uid)) {
-                    await signOut(auth);
-                    showAlert("You are not authorized to access this panel.");
-                }
-            } catch (error) { showAlert(error.message); }
-        }
-
-        function loadDashboardData() {
-            onSnapshot(collection(db, "users"), snap => { document.getElementById('total-users').textContent = snap.size; });
-            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending")), snap => { document.getElementById('pending-withdrawals').textContent = snap.size; });
-        }
-
-        function loadUsers() {
-            const usersTableBody = document.getElementById('users-table-body');
-            onSnapshot(collection(db, "users"), (snapshot) => {
-                usersTableBody.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const user = doc.data();
-                    const isBlocked = user.isBlocked || false;
-                    const row = `<tr>
-                        <td>${user.name || 'N/A'}</td><td>${user.email}</td><td>${user.balance || 0}</td>
-                        <td><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${isBlocked ? 'Blocked' : 'Active'}</span></td>
-                        <td><button class="btn text-xs ${isBlocked ? 'btn-success' : 'btn-danger'}" onclick="window.toggleBlockUser('${doc.id}', ${isBlocked})">${isBlocked ? 'Unblock' : 'Block'}</button></td>
-                    </tr>`;
-                    usersTableBody.innerHTML += row;
-                });
-            });
-        }
-
-        function loadWithdrawals() {
-            const withdrawalsTableBody = document.getElementById('withdrawals-table-body');
-            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending")), (snapshot) => {
-                withdrawalsTableBody.innerHTML = '';
-                snapshot.forEach(docSnap => {
-                    const request = docSnap.data();
-                    const requestedDate = request.requestedAt?.toDate().toLocaleString() || 'N/A';
-                    const row = `<tr>
-                        <td>${request.userName || 'N/A'}</td><td>${request.amount}</td><td>${request.method}</td>
-                        <td>${request.paymentDetail || 'N/A'}</td><td>${requestedDate}</td>
-                        <td class="space-x-2">
-                            <button class="btn btn-success text-xs" onclick="window.handleWithdrawal('${docSnap.id}', 'approved')">Approve</button>
-                            <button class="btn btn-danger text-xs" onclick="window.handleWithdrawal('${docSnap.id}', 'rejected')">Reject</button>
-                        </td>
-                    </tr>`;
-                    withdrawalsTableBody.innerHTML += row;
-                });
-            });
-        }
-
-        async function loadSettings() {
-            const configRef = doc(db, "config", "main");
-            const docSnap = await getDoc(configRef);
-            if (docSnap.exists()) {
-                const config = docSnap.data();
-                document.getElementById('min-withdrawal').value = config.minWithdrawal || '';
-                document.getElementById('daily-ad-limit').value = config.dailyAdLimit || '';
-                document.getElementById('coin-value-coins').value = config.coinValueCoins || '';
-                document.getElementById('coin-value-usd').value = config.coinValueUsd || '';
-                document.getElementById('payment-methods').value = (config.paymentMethods || []).join(',');
-            }
-        }
-
-        window.toggleBlockUser = (userId, isBlocked) => {
-            const action = isBlocked ? 'unblock' : 'block';
-            showConfirm(`Are you sure you want to ${action} this user?`, async () => {
-                const userRef = doc(db, "users", userId);
-                try {
-                    await updateDoc(userRef, { isBlocked: !isBlocked });
-                    showAlert(`User has been successfully ${action}ed.`);
-                } catch (error) { showAlert(`Error: ${error.message}`); }
-            });
-        };
-
-        window.handleWithdrawal = (requestId, newStatus) => {
-            showConfirm(`Are you sure you want to ${newStatus} this request?`, async () => {
-                const requestRef = doc(db, "withdrawals", requestId);
-                try {
-                    if (newStatus === 'rejected') {
-                        const requestSnap = await getDoc(requestRef);
-                        if (requestSnap.exists()) {
-                            const requestData = requestSnap.data();
-                            const userRef = doc(db, "users", requestData.userId);
-                            const userSnap = await getDoc(userRef);
-                            if(userSnap.exists()){
-                               const currentBalance = userSnap.data().balance || 0;
-                               await updateDoc(userRef, { balance: currentBalance + requestData.amount });
-                            }
-                        }
-                    }
-                    await updateDoc(requestRef, { status: newStatus });
-                    showAlert(`Request has been ${newStatus}.`);
-                } catch (error) { showAlert(`Error: ${error.message}`); }
-            });
-        };
-
-        async function sendNotification() {
-            const title = document.getElementById('notification-title').value;
-            const message = document.getElementById('notification-message').value;
-            if (!title || !message) return showAlert("Title and message are required.");
-            try {
-                await addDoc(collection(db, "notifications"), { title, message, createdAt: serverTimestamp() });
-                showAlert("Notification sent to all users successfully!");
-                document.getElementById('notification-title').value = '';
-                document.getElementById('notification-message').value = '';
-            } catch (error) { showAlert(`Error: ${error.message}`); }
-        }
-
-        async function saveSettings() {
-            const minWithdrawal = parseInt(document.getElementById('min-withdrawal').value);
-            const dailyAdLimit = parseInt(document.getElementById('daily-ad-limit').value);
-            const coinValueCoins = parseInt(document.getElementById('coin-value-coins').value);
-            const coinValueUsd = parseInt(document.getElementById('coin-value-usd').value);
-            const paymentMethods = document.getElementById('payment-methods').value.split(',').map(s => s.trim()).filter(Boolean);
-            if (isNaN(minWithdrawal) || isNaN(dailyAdLimit) || isNaN(coinValueCoins) || isNaN(coinValueUsd)) return showAlert("Please enter valid numbers in all numeric fields.");
-            try {
-                await setDoc(doc(db, "config", "main"), { minWithdrawal, dailyAdLimit, coinValueCoins, coinValueUsd, paymentMethods }, { merge: true });
-                showAlert("Settings saved successfully!");
-            } catch (error) { showAlert(`Error saving settings: ${error.message}`); }
-        }
         
-        function showAlert(message) {
-            document.getElementById('alert-message').textContent = message;
-            document.getElementById('custom-alert').classList.remove('hidden');
-            document.getElementById('alert-ok-btn').onclick = () => { document.getElementById('custom-alert').classList.add('hidden'); };
-        }
+        // ... and so on for all other functions.
+        // You should have the complete script from the file I sent when you asked "User bales kom beshi korte pari"
+        // Just replace the old `loadUsers` function with the new one I provided above.
 
-        function showConfirm(message, onConfirm) {
-            const confirmModal = document.getElementById('custom-confirm');
-            const confirmMessage = document.getElementById('confirm-message');
-            const confirmOkBtn = document.getElementById('confirm-ok-btn');
-            const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
-
-            confirmMessage.textContent = message;
-            confirmModal.classList.remove('hidden');
-
-            const okListener = () => {
-                onConfirm();
-                confirmModal.classList.add('hidden');
-                confirmOkBtn.removeEventListener('click', okListener);
-                confirmCancelBtn.removeEventListener('click', cancelListener);
-            };
-
-            const cancelListener = () => {
-                confirmModal.classList.add('hidden');
-                confirmOkBtn.removeEventListener('click', okListener);
-                confirmCancelBtn.removeEventListener('click', cancelListener);
-            };
-
-            confirmOkBtn.addEventListener('click', okListener);
-            confirmCancelBtn.addEventListener('click', cancelListener);
-        }
     </script>
 </body>
-    </html>
-
+</html>

@@ -110,11 +110,11 @@
                             <label class="block font-semibold mb-2">Coin Value</label>
                             <div class="flex items-center space-x-2">
                                 <input type="number" id="coin-value-coins" class="w-full px-4 py-2 border rounded-lg">
-                                <span>Coins = ₹</span>
-                                <input type="number" id="coin-value-inr" class="w-full px-4 py-2 border rounded-lg">
+                                <span>Coins = $</span>
+                                <input type="number" id="coin-value-usd" class="w-full px-4 py-2 border rounded-lg">
                             </div>
                         </div>
-                        <div class="mb-6"><label class="block font-semibold mb-2">Payment Methods (comma-separated)</label><input type="text" id="payment-methods" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g. UPI,Paytm"></div>
+                        <div class="mb-6"><label class="block font-semibold mb-2">Payment Methods (comma-separated)</label><input type="text" id="payment-methods" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g. PayPal,Skrill,Bank Transfer"></div>
                         <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
             appId: "1:742329472485:web:fe097f3d11a0cfca264b0c"
         };
         
-        const ADMIN_UIDS = ["xHHTx8D2FkaZ732umTqfLotsy6y2"]; 
+        const ADMIN_UIDS = ["kdGbhVRBZHZi28PcnECRMtNCHrW2"]; 
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -209,7 +209,7 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 if (!ADMIN_UIDS.includes(userCredential.user.uid)) {
                     await signOut(auth);
-                    showAlert("Aap is panel ko access karne ke liye authorized nahi hain.");
+                    showAlert("You are not authorized to access this panel.");
                 }
             } catch (error) { showAlert(error.message); }
         }
@@ -264,24 +264,24 @@
                 document.getElementById('min-withdrawal').value = config.minWithdrawal || '';
                 document.getElementById('daily-ad-limit').value = config.dailyAdLimit || '';
                 document.getElementById('coin-value-coins').value = config.coinValueCoins || '';
-                document.getElementById('coin-value-inr').value = config.coinValueInr || '';
+                document.getElementById('coin-value-usd').value = config.coinValueUsd || '';
                 document.getElementById('payment-methods').value = (config.paymentMethods || []).join(',');
             }
         }
 
         window.toggleBlockUser = (userId, isBlocked) => {
             const action = isBlocked ? 'unblock' : 'block';
-            showConfirm(`Kya aap is user ko ${action} karna chahte hain?`, async () => {
+            showConfirm(`Are you sure you want to ${action} this user?`, async () => {
                 const userRef = doc(db, "users", userId);
                 try {
                     await updateDoc(userRef, { isBlocked: !isBlocked });
-                    showAlert(`User safaltapoorvak ${action}ed ho gaya hai.`);
+                    showAlert(`User has been successfully ${action}ed.`);
                 } catch (error) { showAlert(`Error: ${error.message}`); }
             });
         };
 
         window.handleWithdrawal = (requestId, newStatus) => {
-            showConfirm(`Kya aap is request ko ${newStatus} karna chahte hain?`, async () => {
+            showConfirm(`Are you sure you want to ${newStatus} this request?`, async () => {
                 const requestRef = doc(db, "withdrawals", requestId);
                 try {
                     if (newStatus === 'rejected') {
@@ -297,7 +297,7 @@
                         }
                     }
                     await updateDoc(requestRef, { status: newStatus });
-                    showAlert(`Request ${newStatus} ho gayi hai.`);
+                    showAlert(`Request has been ${newStatus}.`);
                 } catch (error) { showAlert(`Error: ${error.message}`); }
             });
         };
@@ -305,10 +305,10 @@
         async function sendNotification() {
             const title = document.getElementById('notification-title').value;
             const message = document.getElementById('notification-message').value;
-            if (!title || !message) return showAlert("Title aur message dono zaroori hain.");
+            if (!title || !message) return showAlert("Title and message are required.");
             try {
                 await addDoc(collection(db, "notifications"), { title, message, createdAt: serverTimestamp() });
-                showAlert("Notification sabhi users ko bhej di gayi hai!");
+                showAlert("Notification sent to all users successfully!");
                 document.getElementById('notification-title').value = '';
                 document.getElementById('notification-message').value = '';
             } catch (error) { showAlert(`Error: ${error.message}`); }
@@ -318,13 +318,13 @@
             const minWithdrawal = parseInt(document.getElementById('min-withdrawal').value);
             const dailyAdLimit = parseInt(document.getElementById('daily-ad-limit').value);
             const coinValueCoins = parseInt(document.getElementById('coin-value-coins').value);
-            const coinValueInr = parseInt(document.getElementById('coin-value-inr').value);
+            const coinValueUsd = parseInt(document.getElementById('coin-value-usd').value);
             const paymentMethods = document.getElementById('payment-methods').value.split(',').map(s => s.trim()).filter(Boolean);
-            if (isNaN(minWithdrawal) || isNaN(dailyAdLimit) || isNaN(coinValueCoins) || isNaN(coinValueInr)) return showAlert("Kripya sabhi number fields mein valid number daalein.");
+            if (isNaN(minWithdrawal) || isNaN(dailyAdLimit) || isNaN(coinValueCoins) || isNaN(coinValueUsd)) return showAlert("Please enter valid numbers in all numeric fields.");
             try {
-                await setDoc(doc(db, "config", "main"), { minWithdrawal, dailyAdLimit, coinValueCoins, coinValueInr, paymentMethods }, { merge: true });
-                showAlert("Settings safaltapoorvak save ho gayi hain!");
-            } catch (error) { showAlert(`Settings save karne mein error: ${error.message}`); }
+                await setDoc(doc(db, "config", "main"), { minWithdrawal, dailyAdLimit, coinValueCoins, coinValueUsd, paymentMethods }, { merge: true });
+                showAlert("Settings saved successfully!");
+            } catch (error) { showAlert(`Error saving settings: ${error.message}`); }
         }
         
         function showAlert(message) {
@@ -360,5 +360,4 @@
         }
     </script>
 </body>
-</html>
-
+    </html>

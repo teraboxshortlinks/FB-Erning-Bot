@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily earn money Pro</title>
     
-    <!-- Main Ad Script -->
-    <script src='//libtl.com/sdk.js' data-zone='9571075' data-sdk='show_9571075'></script>
+    <!-- Adsterra script will be loaded dynamically -->
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,9 +33,16 @@
 </head>
 <body class="max-w-md mx-auto">
 
-    <!-- App Loader -->
-    <div id="loader" class="hidden fixed inset-0 dark-bg bg-opacity-75 flex items-center justify-center z-50">
+    <!-- App Loader - Made visible by default -->
+    <div id="loader" class="fixed inset-0 dark-bg flex items-center justify-center z-50">
         <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-accent"></div>
+    </div>
+
+    <!-- Error Display -->
+    <div id="error-display" class="hidden fixed inset-0 dark-bg flex-col items-center justify-center z-50 p-4 text-center">
+        <h2 class="text-2xl font-bold text-red-500 mb-4">Oops! Something went wrong.</h2>
+        <p class="text-gray-400 mb-6">The application could not be loaded. Please try again later.</p>
+        <p id="error-message" class="text-xs text-gray-500"></p>
     </div>
 
     <!-- Authentication Section -->
@@ -62,6 +68,8 @@
 
     <!-- Main App Container -->
     <div id="app-container" class="min-h-screen flex-col main-page">
+        <!-- Header, Main, Nav sections remain the same -->
+        <!-- ... Paste your full <header>, <main>, and <nav> HTML here ... -->
         <header class="flex items-center justify-between p-4 sticky top-0 bg-opacity-80 backdrop-blur-md z-10 dark-bg">
             <h1 class="text-xl font-bold">Daily earn money Pro</h1>
             <div class="flex items-center space-x-4">
@@ -74,8 +82,8 @@
         </header>
 
         <main class="flex-grow">
-            <!-- Home Page (Dashboard) -->
-            <div id="home-page" class="p-4 space-y-6 sub-page">
+            <!-- All sub-pages (home, tasks, wallet, etc.) go here -->
+             <div id="home-page" class="p-4 space-y-6 sub-page">
                 <div class="text-left">
                     <p class="text-gray-400">Hello,</p>
                     <h2 id="user-greeting" class="text-2xl font-bold">User Name</h2>
@@ -124,7 +132,6 @@
                 </div>
             </div>
 
-            <!-- Tasks Page -->
             <div id="tasks-page" class="p-4 space-y-6 sub-page">
                  <div class="flex justify-between items-center">
                     <div>
@@ -134,7 +141,6 @@
                     <p class="text-sm text-gray-400">Tasks Left: <span id="tasks-left-count">...</span></p>
                 </div>
                 <div class="space-y-3">
-                    <!-- New Interactive Tasks -->
                     <div class="card-bg p-3 rounded-lg flex items-center justify-between">
                         <div class="flex items-center space-x-3"><span class="text-3xl">📅</span><div><h3 class="font-semibold">Daily Check-in</h3><p class="text-xs text-gray-400">Get your daily bonus!</p></div></div>
                         <button id="daily-checkin-btn" class="bg-green-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn">Check-in</button>
@@ -152,7 +158,6 @@
                         <button class="bg-teal-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleDirectLinkTask()">Visit</button>
                     </div>
                     
-                    <!-- Original 4 Ad Tasks -->
                     <div class="my-4 border-t border-gray-700"></div>
                     <h3 class="text-lg font-semibold text-center text-gray-400">Ad Tasks</h3>
 
@@ -174,10 +179,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Wallet, Refer, Profile, Notifications Pages -->
-            <!-- These page structures remain the same. -->
-            <!-- ... -->
+            
+            <!-- Other pages... -->
         </main>
 
         <nav class="bottom-nav sticky bottom-0 grid grid-cols-5 items-center text-center py-2 card-bg">
@@ -213,157 +216,89 @@
         import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        // DOM Elements
+        const loader = document.getElementById('loader');
+        const errorDisplay = document.getElementById('error-display');
+        const errorMessageEl = document.getElementById('error-message');
 
+        // Other DOM elements... (You can keep the rest of your element declarations here)
+        
         let currentUser = null;
         let userData = null;
         let appConfig = {};
-        
-        // ... (All DOM elements are the same)
 
         window.onload = () => {
-            // ... same
+            try {
+                lucide.createIcons();
+                setupEventListeners();
+                // Don't hide the loader here, let the auth state change handle it.
+                onAuthStateChanged(auth, handleAuthStateChange);
+            } catch (error) {
+                showFatalError("Initialization failed.", error);
+            }
         };
 
+        function showFatalError(message, error) {
+            console.error(message, error);
+            loader.style.display = 'none';
+            errorDisplay.style.display = 'flex';
+            errorMessageEl.textContent = error.message;
+        }
+
         async function handleAuthStateChange(user) {
-            if (user) {
-                // ... same loading logic ...
-                await fetchAppConfig();
-                loadAdPopupScript(); // Load dynamic Adsterra Ad
-                // ... same welcome message logic ...
-            } else {
-                // ... same logic ...
+            try {
+                if (user) {
+                    currentUser = user;
+                    await fetchUserData();
+                    if (userData.isBlocked) {
+                        showAlert("Your account has been blocked.");
+                        await signOut(auth);
+                        loader.style.display = 'none';
+                        showMainPage('auth-section');
+                        return;
+                    }
+                    await fetchAppConfig();
+                    loadAdPopupScript(); // Load dynamic Adsterra Ad
+                    await checkNewNotifications();
+                    updateUI();
+                    showMainPage('app-container');
+                    navigateTo('home-page');
+                    
+                    const welcomeMessage = `Welcome!\n🔥\nAssalamu Alaikum, I am paying honestly. If you work according to the rules, you will get 100% payment, InshaAllah 🔥\n\n⚡ Joint Bonus: 30 Taka\n💸 Per Referral: 40 Taka\n💰 Per Ad: 5 Taka\n💖 Opportunity to watch 10 ads every day\n♨️ No need to invest on this site, you can earn completely free, thank you.\n\n📌 100% payment guarantee\n😊 Bkash, Nagad\n\n~ Do not use any type of VPN while working. Work according to the rules and stay connected to our Telegram channel ✅`;
+                    showAlert(welcomeMessage);
+                } else {
+                    currentUser = null;
+                    userData = null;
+                    showMainPage('auth-section');
+                }
+                loader.style.display = 'none'; // Hide loader on success
+            } catch (error) {
+                showFatalError("Authentication state change failed.", error);
             }
         }
-        
+
+        // --- All your other functions (fetchUserData, fetchAppConfig, updateUI, task handlers, etc.) go here ---
+        // --- Copy the entire set of JS functions from your last working code ---
+        // --- Make sure every function is included for the app to work correctly ---
+
+        // Example:
         function loadAdPopupScript() {
-            if (appConfig.adPopupEnabled && appConfig.adPopupScriptUrl) {
-                const script = document.createElement('script');
-                script.src = appConfig.adPopupScriptUrl.startsWith('//') ? 'https:' + appConfig.adPopupScriptUrl : appConfig.adPopupScriptUrl;
-                document.head.appendChild(script);
-            }
+            // ... function code ...
         }
         
-        // ... All other functions like fetchUserData, fetchAppConfig, updateUI are the same ...
-        // ... The key changes are in the task handler functions ...
-
-        // NEW Helper function to show an ad after a task
-        async function showAdAfterTask() {
-            if (typeof window.show_9571075 !== 'function') {
-                console.log("Ad service not available, skipping ad.");
-                return;
-            }
-            console.log("Attempting to show an ad after task completion...");
-            try {
-                // Show a simple interstitial ad
-                await window.show_9571075();
-                console.log("Ad shown successfully after task.");
-            } catch (error) {
-                console.error("Could not show ad after task:", error);
-            }
+        async function fetchUserData() {
+            // ... function code ...
         }
-
-        async function handleDailyCheckin() {
-            const today = new Date().toISOString().split('T')[0];
-            if (userData.lastCheckinDate === today) {
-                return showAlert("You have already claimed your daily check-in bonus today.");
-            }
-            loader.style.display = 'flex';
-            try {
-                const rewardAmount = 25;
-                await updateBalance(rewardAmount, false); // Not a daily task, so false
-                const userRef = doc(db, "users", currentUser.uid);
-                await updateDoc(userRef, { lastCheckinDate: today });
-                userData.lastCheckinDate = today;
-                
-                // Show ad AFTER giving the reward
-                await showAdAfterTask();
-
-                showAlert(`Congratulations! You have received ${rewardAmount} coins as a daily bonus.`);
-                updateCheckinButton();
-            } catch (error) {
-                console.error("Error handling daily check-in:", error);
-            } finally {
-                loader.style.display = 'none';
-            }
-        }
-
-        async function handleInteractiveTask(taskType) {
-            if (!await checkTaskLimit()) return;
-            loader.style.display = 'flex';
-            
-            try {
-                let rewardAmount = 0, message = "";
-                if (taskType === 'spin') {
-                    rewardAmount = Math.floor(Math.random() * 41) + 10;
-                    message = `Congratulations! You won ${rewardAmount} coins from the spin wheel!`;
-                } else if (taskType === 'scratch') {
-                    rewardAmount = 20;
-                    message = `You scratched and won ${rewardAmount} coins!`;
-                }
-                
-                if (rewardAmount > 0) {
-                    // Update balance and task count first
-                    await updateBalance(rewardAmount, true);
-                    const userRef = doc(db, "users", currentUser.uid);
-                    const newCount = (userData.dailyTaskCount || 0) + 1;
-                    const today = new Date().toISOString().split('T')[0];
-                    await updateDoc(userRef, { dailyTaskCount: newCount, lastTaskDate: today });
-                    userData.dailyTaskCount = newCount;
-                    userData.lastTaskDate = today;
-
-                    // Then show the ad
-                    await showAdAfterTask();
-
-                    // Finally, show the success message
-                    showAlert(message);
-                    updateTasksLeftCount();
-                }
-            } finally {
-                loader.style.display = 'none';
-            }
-        }
-        window.handleInteractiveTask = handleInteractiveTask;
         
-        async function handleAdTask(taskType) {
-            if (!await checkTaskLimit()) return;
-
-            if (typeof window.show_9571075 !== 'function') {
-                return showAlert("Ad service is currently unavailable.");
-            }
-
-            loader.style.display = 'flex';
-            
-            let adPromise;
-            try {
-                switch(taskType) {
-                    case 'interstitial': adPromise = window.show_9571075(); break;
-                    case 'popup': adPromise = window.show_9571075('pop'); break;
-                    case 'inApp': adPromise = window.show_9571075({ type: 'inApp' }); break;
-                    case 'miniApp': adPromise = window.show_9571075(); break;
-                    default: loader.style.display = 'none'; return;
-                }
-
-                await adPromise;
-
-                let rewardAmount = (taskType === 'miniApp') ? 100 : 50;
-                if (taskType === 'inApp') rewardAmount = 0;
-                
-                await handleTaskCompletion(rewardAmount, rewardAmount > 0 ? `Congratulations! You earned ${rewardAmount} coins.` : 'Task complete!');
-
-            } catch (e) {
-                console.error("Ad error:", e);
-                showAlert('The ad could not be shown.');
-            } finally {
-                loader.style.display = 'none';
-            }
+        // And so on for ALL functions...
+        // ...
+        
+        function showAlert(message) {
+            // ... function code ...
         }
-        window.handleAdTask = handleAdTask;
+        window.showAlert = showAlert;
 
-        // --- All other JS functions (handleTaskCompletion, checkTaskLimit, directLink, etc.) remain the same ---
-        // --- Just ensure they are all present in your final script tag ---
+        // Ensure all your `window.functionName = functionName` are also present
     </script>
 </body>
 </html>

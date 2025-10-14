@@ -76,7 +76,6 @@
         </header>
 
         <main class="flex-grow pb-16">
-            <!-- Home Page -->
             <div id="home-page" class="p-4 space-y-6 sub-page">
                 <div class="text-left"><p class="text-gray-400">Hello,</p><h2 id="user-greeting" class="text-2xl font-bold">User Name</h2></div>
                 <div class="gradient-card p-5 rounded-xl text-white shadow-lg space-y-3">
@@ -91,7 +90,6 @@
                 </div>
                 <div><h3 class="text-lg font-semibold mb-3">Start Earning</h3><div class="card-bg p-4 rounded-lg flex justify-between items-center cursor-pointer" onclick="navigateTo('tasks-page')"><div><h4 class="font-bold">Go to Task Zone</h4><p class="text-sm text-gray-400">Complete tasks and earn more coins!</p></div><i data-lucide="arrow-right" class="w-6 h-6 text-accent"></i></div></div>
             </div>
-            <!-- Tasks Page -->
             <div id="tasks-page" class="p-4 space-y-6 sub-page">
                  <div class="flex justify-between items-center"><div><h2 class="text-xl font-bold">Earning Zone</h2><p class="text-sm text-gray-400 mb-4">Complete tasks to get rewards.</p></div><p class="text-sm text-gray-400">Tasks Left: <span id="tasks-left-count">...</span></p></div>
                 <div class="space-y-3">
@@ -106,7 +104,6 @@
                     <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">🎮</span><div><h3 class="font-semibold">Play Mini App</h3><p class="text-xs text-gray-400">Get a big reward!</p></div></div><button class="bg-blue-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleAdTask('miniApp')">Play</button></div>
                 </div>
             </div>
-            <!-- Wallet Page -->
             <div id="wallet-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center">My Wallet</h2>
                 <div class="card-bg p-4 rounded-lg">
@@ -120,43 +117,25 @@
                     <div id="payment-details-container"></div>
                     <button id="withdraw-btn" class="w-full p-3 rounded-lg btn-accent mt-3">Request Withdrawal</button>
                 </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-3">Withdrawal History</h3>
-                    <div id="withdrawal-history-list" class="space-y-3"></div>
-                </div>
+                <div><h3 class="text-lg font-semibold mb-3">Withdrawal History</h3><div id="withdrawal-history-list" class="space-y-3"></div></div>
             </div>
-            <!-- Refer Page -->
             <div id="refer-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center">Refer & Earn</h2>
                 <div class="card-bg p-6 rounded-lg text-center">
                     <p class="text-gray-400 mb-2">Your Referral Code</p>
-                    <div class="bg-gray-800 p-3 rounded-lg flex items-center justify-center mb-4">
-                        <span id="referral-code" class="text-2xl font-bold tracking-widest">LOADING...</span>
-                        <button id="copy-code-btn" class="ml-4"><i data-lucide="copy" class="w-6 h-6 text-gray-400"></i></button>
-                    </div>
+                    <div class="bg-gray-800 p-3 rounded-lg flex items-center justify-center mb-4"><span id="referral-code" class="text-2xl font-bold tracking-widest">LOADING...</span><button id="copy-code-btn" class="ml-4"><i data-lucide="copy" class="w-6 h-6 text-gray-400"></i></button></div>
                     <p class="text-sm text-gray-300">Share the code with your friends.</p>
                 </div>
                 <button id="share-btn" class="w-full p-3 rounded-lg btn-accent">Share Your Code</button>
-                <div class="card-bg p-4 rounded-lg mt-6">
-                   <h3 class="font-semibold mb-3 text-center">Have a Referral Code?</h3>
-                   <input id="enter-referral-code" type="text" placeholder="Enter code here" class="w-full p-3 rounded-lg input-field mb-3">
-                   <button id="apply-referral-btn" class="w-full p-3 rounded-lg btn-accent">Apply Code</button>
-                </div>
+                <div class="card-bg p-4 rounded-lg mt-6"><h3 class="font-semibold mb-3 text-center">Have a Referral Code?</h3><input id="enter-referral-code" type="text" placeholder="Enter code here" class="w-full p-3 rounded-lg input-field mb-3"><button id="apply-referral-btn" class="w-full p-3 rounded-lg btn-accent">Apply Code</button></div>
             </div>
-            <!-- Profile Page -->
             <div id="profile-page" class="p-4 space-y-6 sub-page">
                 <h2 class="text-xl font-bold text-center mb-4">Profile</h2>
-                <div class="flex flex-col items-center">
-                    <img id="profile-page-img" src="https://placehold.co/100x100/1e1e1e/ff8c00?text=U" class="w-24 h-24 rounded-full mb-2">
-                    <h2 id="profile-name" class="text-xl font-bold">User Name</h2>
-                    <p id="profile-email" class="text-gray-400">user@email.com</p>
-                </div>
+                <div class="flex flex-col items-center"><img id="profile-page-img" src="https://placehold.co/100x100/1e1e1e/ff8c00?text=U" class="w-24 h-24 rounded-full mb-2"><h2 id="profile-name" class="text-xl font-bold">User Name</h2><p id="profile-email" class="text-gray-400">user@email.com</p></div>
                 <button id="logout-btn" class="w-full mt-6 p-3 rounded-lg bg-red-600 text-white font-bold">Logout</button>
             </div>
-            <!-- Notifications Page -->
             <div id="notifications-page" class="p-4 space-y-4 sub-page">
-                <h2 class="text-xl font-bold text-center">Notifications</h2>
-                <div id="notifications-list" class="space-y-3"></div>
+                <h2 class="text-xl font-bold text-center">Notifications</h2><div id="notifications-list" class="space-y-3"></div>
             </div>
         </main>
 
@@ -223,6 +202,9 @@
         // --- Core App Logic ---
         window.onload = () => {
             try {
+                // Critical: Setup listeners immediately so login/signup buttons work.
+                setupEventListeners();
+                lucide.createIcons();
                 onAuthStateChanged(auth, handleAuthStateChange);
             } catch (error) {
                 showFatalError("Initialization failed.", error);
@@ -255,8 +237,6 @@
                         return;
                     }
                     
-                    lucide.createIcons();
-                    setupEventListeners();
                     loadAdPopupScript();
                     await checkNewNotifications();
                     await updateUI();
@@ -445,20 +425,7 @@
             if (!name || !email || !password) return showAlert("Please fill all fields.");
             loader.style.display = 'flex';
             try {
-                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                 const user = userCredential.user;
-                 const userRef = doc(db, "users", user.uid);
-                 const ownReferralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-                 const defaultUserData = {
-                     uid: user.uid, name: name, email: user.email,
-                     balance: 50, referralCode: ownReferralCode, referredBy: null,
-                     lastNotificationCheck: new Date(),
-                     createdAt: serverTimestamp(),
-                     dailyTaskCount: 0, lastTaskDate: new Date().toISOString().split('T')[0], isBlocked: false,
-                     lastCheckinDate: null, todayEarnings: 0
-                 };
-                 await setDoc(userRef, defaultUserData);
-                 userData = defaultUserData;
+                 await createUserWithEmailAndPassword(auth, email, password);
             } catch (error) {
                 showAlert(error.message);
             } finally {
@@ -479,7 +446,6 @@
             }
         }
         async function handleLogout() { await signOut(auth); }
-        
         async function checkNewNotifications() {if (!userData || !userData.lastNotificationCheck || typeof userData.lastNotificationCheck.seconds === 'undefined') return;const q = query(collection(db, "notifications"), where("createdAt", ">", userData.lastNotificationCheck), limit(1));const querySnapshot = await getDocs(q);notificationDot.style.display = querySnapshot.empty ? 'none' : 'block';}
         async function loadNotifications() { /* ... */ }
         async function loadWithdrawalHistory() { /* ... */ }
@@ -526,16 +492,7 @@
                 }
                 
                 if (rewardAmount > 0) {
-                    await updateBalance(rewardAmount, true);
-                    const userRef = doc(db, "users", currentUser.uid);
-                    const newCount = (userData.dailyTaskCount || 0) + 1;
-                    const today = new Date().toISOString().split('T')[0];
-                    await updateDoc(userRef, { dailyTaskCount: newCount, lastTaskDate: today });
-                    userData.dailyTaskCount = newCount;
-                    userData.lastTaskDate = today;
-                    await showAdAfterTask();
-                    showAlert(message);
-                    updateTasksLeftCount();
+                    await handleTaskCompletion(rewardAmount, message, true);
                 }
             } finally { loader.style.display = 'none'; }
         }
@@ -576,7 +533,7 @@
         }
         window.handleDirectLinkTask = handleDirectLinkTask;
 
-        async function handleTaskCompletion(rewardAmount, message) {
+        async function handleTaskCompletion(rewardAmount, message, showAd = false) {
             await updateBalance(rewardAmount, true);
             const userRef = doc(db, "users", currentUser.uid);
             const newCount = (userData.dailyTaskCount || 0) + 1;
@@ -584,6 +541,7 @@
             await updateDoc(userRef, { dailyTaskCount: newCount, lastTaskDate: today });
             userData.dailyTaskCount = newCount;
             userData.lastTaskDate = today;
+            if (showAd) { await showAdAfterTask(); }
             showAlert(message);
             updateTasksLeftCount();
         }

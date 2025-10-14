@@ -75,7 +75,7 @@
             </div>
         </header>
 
-        <main class="flex-grow">
+        <main class="flex-grow pb-16">
             <!-- Home Page -->
             <div id="home-page" class="p-4 space-y-6 sub-page">
                 <div class="text-left"><p class="text-gray-400">Hello,</p><h2 id="user-greeting" class="text-2xl font-bold">User Name</h2></div>
@@ -108,19 +108,55 @@
             </div>
             <!-- Wallet Page -->
             <div id="wallet-page" class="p-4 space-y-6 sub-page">
-                <!-- Wallet HTML -->
+                <h2 class="text-xl font-bold text-center">My Wallet</h2>
+                <div class="card-bg p-4 rounded-lg">
+                    <h3 class="font-semibold mb-3">Withdraw Earnings</h3>
+                    <p class="text-sm text-gray-400 mb-1">Current Balance: <span class="font-bold text-accent"><span id="wallet-coin-balance">0</span> Coins</span></p>
+                    <p class="text-sm text-gray-400 mb-2">Minimum Withdrawal: <span id="min-withdrawal-info">...</span></p>
+                    <p class="text-sm text-yellow-400 mb-2">Note: You need at least 15 referrals to be able to withdraw.</p>
+                    <p class="text-sm text-gray-400 mb-4 font-semibold" id="coin-value-info">...</p>
+                    <input id="withdraw-amount" type="number" placeholder="Enter coin amount" class="w-full p-3 rounded-lg input-field mb-3">
+                    <select id="withdraw-method" class="w-full p-3 rounded-lg input-field mb-3"></select>
+                    <div id="payment-details-container"></div>
+                    <button id="withdraw-btn" class="w-full p-3 rounded-lg btn-accent mt-3">Request Withdrawal</button>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Withdrawal History</h3>
+                    <div id="withdrawal-history-list" class="space-y-3"></div>
+                </div>
             </div>
             <!-- Refer Page -->
             <div id="refer-page" class="p-4 space-y-6 sub-page">
-                <!-- Refer HTML -->
+                <h2 class="text-xl font-bold text-center">Refer & Earn</h2>
+                <div class="card-bg p-6 rounded-lg text-center">
+                    <p class="text-gray-400 mb-2">Your Referral Code</p>
+                    <div class="bg-gray-800 p-3 rounded-lg flex items-center justify-center mb-4">
+                        <span id="referral-code" class="text-2xl font-bold tracking-widest">LOADING...</span>
+                        <button id="copy-code-btn" class="ml-4"><i data-lucide="copy" class="w-6 h-6 text-gray-400"></i></button>
+                    </div>
+                    <p class="text-sm text-gray-300">Share the code with your friends.</p>
+                </div>
+                <button id="share-btn" class="w-full p-3 rounded-lg btn-accent">Share Your Code</button>
+                <div class="card-bg p-4 rounded-lg mt-6">
+                   <h3 class="font-semibold mb-3 text-center">Have a Referral Code?</h3>
+                   <input id="enter-referral-code" type="text" placeholder="Enter code here" class="w-full p-3 rounded-lg input-field mb-3">
+                   <button id="apply-referral-btn" class="w-full p-3 rounded-lg btn-accent">Apply Code</button>
+                </div>
             </div>
             <!-- Profile Page -->
             <div id="profile-page" class="p-4 space-y-6 sub-page">
-                <!-- Profile HTML -->
+                <h2 class="text-xl font-bold text-center mb-4">Profile</h2>
+                <div class="flex flex-col items-center">
+                    <img id="profile-page-img" src="https://placehold.co/100x100/1e1e1e/ff8c00?text=U" class="w-24 h-24 rounded-full mb-2">
+                    <h2 id="profile-name" class="text-xl font-bold">User Name</h2>
+                    <p id="profile-email" class="text-gray-400">user@email.com</p>
+                </div>
+                <button id="logout-btn" class="w-full mt-6 p-3 rounded-lg bg-red-600 text-white font-bold">Logout</button>
             </div>
             <!-- Notifications Page -->
             <div id="notifications-page" class="p-4 space-y-4 sub-page">
-                <!-- Notifications HTML -->
+                <h2 class="text-xl font-bold text-center">Notifications</h2>
+                <div id="notifications-list" class="space-y-3"></div>
             </div>
         </main>
 
@@ -271,7 +307,7 @@
                 }
             } catch (error) { 
                 console.error("Error fetching user data:", error);
-                throw error; // Throw error to be caught by handleAuthStateChange
+                throw error;
             }
         }
 
@@ -291,7 +327,7 @@
                 };
             } catch (error) { 
                 console.error("Error fetching app config:", error);
-                throw error; // Throw error to be caught by handleAuthStateChange
+                throw error;
             }
         }
         
@@ -305,12 +341,12 @@
             const userInitial = (userData.name || 'U').charAt(0).toUpperCase();
             const profileImgUrl = `https://placehold.co/100x100/1e1e1e/ff8c00?text=${userInitial}`;
             headerProfileImgEl.src = profileImgUrl.replace('100x100', '40x40');
-            //profilePageImgEl.src = profileImgUrl;
+            profilePageImgEl.src = profileImgUrl;
             walletCoinBalanceEl.textContent = balance;
             minWithdrawalInfoEl.textContent = `${appConfig.minWithdrawal || 5000} Coins`;
             coinValueInfoEl.textContent = `${appConfig.coinValueCoins || 1000} Coins = ৳${appConfig.coinValueTaka || 100}`;
-            //profileNameEl.textContent = userData.name || 'No Name';
-            //profileEmailEl.textContent = userData.email || 'No Email';
+            profileNameEl.textContent = userData.name || 'No Name';
+            profileEmailEl.textContent = userData.email || 'No Email';
             referralCodeEl.textContent = userData.referralCode || '...';
             withdrawMethodSelect.innerHTML = '';
             (appConfig.paymentMethods || []).forEach(method => {
@@ -361,7 +397,7 @@
             if (selectedMethod.includes('bkash')) placeholder = "Enter Your BKash Number";
             if (selectedMethod.includes('nagad')) placeholder = "Enter Your Nagad Number";
             if (selectedMethod.includes('rocket')) placeholder = "Enter Your Rocket Number";
-            //paymentDetailsContainer.innerHTML = `<input id="payment-detail-input" type="text" placeholder="${placeholder}" class="w-full p-3 rounded-lg input-field">`;
+            paymentDetailsContainer.innerHTML = `<input id="payment-detail-input" type="text" placeholder="${placeholder}" class="w-full p-3 rounded-lg input-field">`;
         }
         
         function showMainPage(pageId) {
@@ -384,7 +420,7 @@
             document.getElementById('show-login').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('signup-view').classList.add('hidden'); document.getElementById('login-view').classList.remove('hidden'); });
             document.getElementById('signup-btn').addEventListener('click', handleSignup);
             document.getElementById('login-btn').addEventListener('click', handleLogin);
-            // document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            document.getElementById('logout-btn').addEventListener('click', handleLogout);
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -393,11 +429,11 @@
                     navigateTo(pageId);
                 });
             });
-            // document.getElementById('notification-bell').addEventListener('click', () => { navigateTo('notifications-page'); loadNotifications(); });
-            // document.getElementById('copy-code-btn').addEventListener('click', copyReferralCode);
-            // document.getElementById('share-btn').addEventListener('click', shareReferralCode);
-            // document.getElementById('withdraw-btn').addEventListener('click', handleWithdrawal);
-            // document.getElementById('apply-referral-btn').addEventListener('click', handleApplyReferralCode);
+            document.getElementById('notification-bell').addEventListener('click', () => { navigateTo('notifications-page'); loadNotifications(); });
+            document.getElementById('copy-code-btn').addEventListener('click', copyReferralCode);
+            document.getElementById('share-btn').addEventListener('click', shareReferralCode);
+            document.getElementById('withdraw-btn').addEventListener('click', handleWithdrawal);
+            document.getElementById('apply-referral-btn').addEventListener('click', handleApplyReferralCode);
             document.getElementById('daily-checkin-btn').addEventListener('click', handleDailyCheckin);
             withdrawMethodSelect.addEventListener('change', updateDynamicPaymentFields);
         }
@@ -443,15 +479,16 @@
             }
         }
         async function handleLogout() { await signOut(auth); }
-        async function checkNewNotifications() { /* ... */ }
+        
+        async function checkNewNotifications() {if (!userData || !userData.lastNotificationCheck || typeof userData.lastNotificationCheck.seconds === 'undefined') return;const q = query(collection(db, "notifications"), where("createdAt", ">", userData.lastNotificationCheck), limit(1));const querySnapshot = await getDocs(q);notificationDot.style.display = querySnapshot.empty ? 'none' : 'block';}
         async function loadNotifications() { /* ... */ }
         async function loadWithdrawalHistory() { /* ... */ }
         async function handleApplyReferralCode() { /* ... */ }
         async function updateBalance(amount, isTask = false) { if (!currentUser) return;const userRef = doc(db, "users", currentUser.uid);const today = new Date().toISOString().split('T')[0];if (userData.lastTaskDate !== today) {userData.todayEarnings = 0;userData.lastTaskDate = today;}const newBalance = (userData.balance || 0) + amount;let updateData = { balance: newBalance };if (isTask) {const newTodayEarnings = (userData.todayEarnings || 0) + amount;updateData.todayEarnings = newTodayEarnings;userData.todayEarnings = newTodayEarnings;}await updateDoc(userRef, updateData);userData.balance = newBalance;await updateUI();}
         async function getReferralCount() { if (!userData || !userData.referralCode) return 0;const usersRef = collection(db, "users");const q = query(usersRef, where("referredBy", "==", userData.referralCode));const querySnapshot = await getDocs(q);return querySnapshot.size;}
         async function handleWithdrawal() { /* ... */ }
-        function copyReferralCode() { /* ... */ }
-        function shareReferralCode() { /* ... */ }
+        function copyReferralCode() {navigator.clipboard.writeText(referralCodeEl.textContent).then(() => showAlert("Referral code copied!"));}
+        function shareReferralCode() {const botUrl = "https://t.me/dailyearnmoneyprobot";const text = `Join Daily earn money Pro! Use my referral code in our Telegram bot to get a bonus: ${userData.referralCode}\n\nBot Link: ${botUrl}`;if (navigator.share) {navigator.share({ title: 'Join Daily earn money Pro!', text: text });} else {navigator.clipboard.writeText(text).then(() => showAlert("Share feature not available. Message copied!"));}}
         
         async function showAdAfterTask() {
             if (typeof window.show_9571075 !== 'function') return;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily earn money Pro</title>
     
-    <!-- This is the essential ad script you mentioned. It is now re-added. -->
+    <!-- Essential Ad Script -->
     <script src='//libtl.com/sdk.js' data-zone='9571075' data-sdk='show_9571075'></script>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -39,7 +39,7 @@
 
     <div id="error-display" class="hidden fixed inset-0 dark-bg flex-col items-center justify-center z-50 p-4 text-center">
         <h2 class="text-2xl font-bold text-red-500 mb-4">Oops! Something went wrong.</h2>
-        <p class="text-gray-400 mb-6">The application could not be loaded. Please check your connection or try again later.</p>
+        <p class="text-gray-400 mb-6">The application could not be loaded. Please try again later.</p>
         <p id="error-message" class="text-xs text-gray-500"></p>
     </div>
 
@@ -106,7 +106,22 @@
                     <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">🎮</span><div><h3 class="font-semibold">Play Mini App</h3><p class="text-xs text-gray-400">Get a big reward!</p></div></div><button class="bg-blue-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleAdTask('miniApp')">Play</button></div>
                 </div>
             </div>
-             <!-- ... other pages will be injected by JS ... -->
+            <!-- Wallet Page -->
+            <div id="wallet-page" class="p-4 space-y-6 sub-page">
+                <!-- Wallet HTML -->
+            </div>
+            <!-- Refer Page -->
+            <div id="refer-page" class="p-4 space-y-6 sub-page">
+                <!-- Refer HTML -->
+            </div>
+            <!-- Profile Page -->
+            <div id="profile-page" class="p-4 space-y-6 sub-page">
+                <!-- Profile HTML -->
+            </div>
+            <!-- Notifications Page -->
+            <div id="notifications-page" class="p-4 space-y-4 sub-page">
+                <!-- Notifications HTML -->
+            </div>
         </main>
 
         <nav class="bottom-nav sticky bottom-0 grid grid-cols-5 items-center text-center py-2 card-bg">
@@ -254,7 +269,10 @@
                     await setDoc(userRef, defaultUserData);
                     userData = defaultUserData;
                 }
-            } catch (error) { console.error("Error fetching user data:", error); }
+            } catch (error) { 
+                console.error("Error fetching user data:", error);
+                throw error; // Throw error to be caught by handleAuthStateChange
+            }
         }
 
         async function fetchAppConfig() {
@@ -271,7 +289,10 @@
                     adPopupEnabled: false,
                     adPopupScriptUrl: ""
                 };
-            } catch (error) { console.error("Error fetching app config:", error); }
+            } catch (error) { 
+                console.error("Error fetching app config:", error);
+                throw error; // Throw error to be caught by handleAuthStateChange
+            }
         }
         
         async function updateUI() {
@@ -284,12 +305,12 @@
             const userInitial = (userData.name || 'U').charAt(0).toUpperCase();
             const profileImgUrl = `https://placehold.co/100x100/1e1e1e/ff8c00?text=${userInitial}`;
             headerProfileImgEl.src = profileImgUrl.replace('100x100', '40x40');
-            profilePageImgEl.src = profileImgUrl;
+            //profilePageImgEl.src = profileImgUrl;
             walletCoinBalanceEl.textContent = balance;
             minWithdrawalInfoEl.textContent = `${appConfig.minWithdrawal || 5000} Coins`;
             coinValueInfoEl.textContent = `${appConfig.coinValueCoins || 1000} Coins = ৳${appConfig.coinValueTaka || 100}`;
-            profileNameEl.textContent = userData.name || 'No Name';
-            profileEmailEl.textContent = userData.email || 'No Email';
+            //profileNameEl.textContent = userData.name || 'No Name';
+            //profileEmailEl.textContent = userData.email || 'No Email';
             referralCodeEl.textContent = userData.referralCode || '...';
             withdrawMethodSelect.innerHTML = '';
             (appConfig.paymentMethods || []).forEach(method => {
@@ -340,7 +361,7 @@
             if (selectedMethod.includes('bkash')) placeholder = "Enter Your BKash Number";
             if (selectedMethod.includes('nagad')) placeholder = "Enter Your Nagad Number";
             if (selectedMethod.includes('rocket')) placeholder = "Enter Your Rocket Number";
-            paymentDetailsContainer.innerHTML = `<input id="payment-detail-input" type="text" placeholder="${placeholder}" class="w-full p-3 rounded-lg input-field">`;
+            //paymentDetailsContainer.innerHTML = `<input id="payment-detail-input" type="text" placeholder="${placeholder}" class="w-full p-3 rounded-lg input-field">`;
         }
         
         function showMainPage(pageId) {
@@ -363,7 +384,7 @@
             document.getElementById('show-login').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('signup-view').classList.add('hidden'); document.getElementById('login-view').classList.remove('hidden'); });
             document.getElementById('signup-btn').addEventListener('click', handleSignup);
             document.getElementById('login-btn').addEventListener('click', handleLogin);
-            document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            // document.getElementById('logout-btn').addEventListener('click', handleLogout);
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -372,24 +393,62 @@
                     navigateTo(pageId);
                 });
             });
-            document.getElementById('notification-bell').addEventListener('click', () => { navigateTo('notifications-page'); loadNotifications(); });
-            document.getElementById('copy-code-btn').addEventListener('click', copyReferralCode);
-            document.getElementById('share-btn').addEventListener('click', shareReferralCode);
-            document.getElementById('withdraw-btn').addEventListener('click', handleWithdrawal);
-            document.getElementById('apply-referral-btn').addEventListener('click', handleApplyReferralCode);
+            // document.getElementById('notification-bell').addEventListener('click', () => { navigateTo('notifications-page'); loadNotifications(); });
+            // document.getElementById('copy-code-btn').addEventListener('click', copyReferralCode);
+            // document.getElementById('share-btn').addEventListener('click', shareReferralCode);
+            // document.getElementById('withdraw-btn').addEventListener('click', handleWithdrawal);
+            // document.getElementById('apply-referral-btn').addEventListener('click', handleApplyReferralCode);
             document.getElementById('daily-checkin-btn').addEventListener('click', handleDailyCheckin);
             withdrawMethodSelect.addEventListener('change', updateDynamicPaymentFields);
         }
 
-        async function handleSignup() { /* ... */ }
-        async function handleLogin() { /* ... */ }
+        async function handleSignup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            if (!name || !email || !password) return showAlert("Please fill all fields.");
+            loader.style.display = 'flex';
+            try {
+                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                 const user = userCredential.user;
+                 const userRef = doc(db, "users", user.uid);
+                 const ownReferralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+                 const defaultUserData = {
+                     uid: user.uid, name: name, email: user.email,
+                     balance: 50, referralCode: ownReferralCode, referredBy: null,
+                     lastNotificationCheck: new Date(),
+                     createdAt: serverTimestamp(),
+                     dailyTaskCount: 0, lastTaskDate: new Date().toISOString().split('T')[0], isBlocked: false,
+                     lastCheckinDate: null, todayEarnings: 0
+                 };
+                 await setDoc(userRef, defaultUserData);
+                 userData = defaultUserData;
+            } catch (error) {
+                showAlert(error.message);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            if (!email || !password) return showAlert("Please enter email and password.");
+            loader.style.display = 'flex';
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                showAlert(error.message);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
         async function handleLogout() { await signOut(auth); }
         async function checkNewNotifications() { /* ... */ }
         async function loadNotifications() { /* ... */ }
         async function loadWithdrawalHistory() { /* ... */ }
         async function handleApplyReferralCode() { /* ... */ }
-        async function updateBalance(amount, isTask = false) { /* ... */ }
-        async function getReferralCount() { /* ... */ }
+        async function updateBalance(amount, isTask = false) { if (!currentUser) return;const userRef = doc(db, "users", currentUser.uid);const today = new Date().toISOString().split('T')[0];if (userData.lastTaskDate !== today) {userData.todayEarnings = 0;userData.lastTaskDate = today;}const newBalance = (userData.balance || 0) + amount;let updateData = { balance: newBalance };if (isTask) {const newTodayEarnings = (userData.todayEarnings || 0) + amount;updateData.todayEarnings = newTodayEarnings;userData.todayEarnings = newTodayEarnings;}await updateDoc(userRef, updateData);userData.balance = newBalance;await updateUI();}
+        async function getReferralCount() { if (!userData || !userData.referralCode) return 0;const usersRef = collection(db, "users");const q = query(usersRef, where("referredBy", "==", userData.referralCode));const querySnapshot = await getDocs(q);return querySnapshot.size;}
         async function handleWithdrawal() { /* ... */ }
         function copyReferralCode() { /* ... */ }
         function shareReferralCode() { /* ... */ }
